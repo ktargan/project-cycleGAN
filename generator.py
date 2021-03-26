@@ -1,5 +1,3 @@
-!pip install -U tensorflow-addons
-
 import tensorflow as tf
 import numpy as np
 import tensorflow_addons as tfa
