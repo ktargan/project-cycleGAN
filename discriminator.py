@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import tensorflow_addons as tfa
+from . import layers
 
 '''Convolutional Block that combines a Convlayer with InstanceNorm and leakyReLU
 

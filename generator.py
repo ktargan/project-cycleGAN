@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import tensorflow_addons as tfa
+from . import layers
 
 '''Defines a Block as used in the ResNet architecture
   2 covolutional layers
