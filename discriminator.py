@@ -35,8 +35,10 @@ class ConvoBlock(tf.keras.layers.Layer):
   '''
 class Discriminator(tf.keras.Model):
   def __init__(self, patches):
-    self.patches = patches
     super(Discriminator, self).__init__()
+
+    self.patches = patches
+    
     #70 x70 PatchGan
     #Zhu et al: C64-C128-C256-C512
     #C64: 4 × 4 Convolution-InstanceNorm-LeakyReLU layer with 64 filters and stride 2.
