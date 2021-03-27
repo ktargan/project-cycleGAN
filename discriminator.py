@@ -68,7 +68,7 @@ class Discriminator(tf.keras.Model):
 
   def call(self,x):
     #patch into pieces of 70*70
-    x = tf.image.random_crop(x,[1,patches,patches,3])
+    x = tf.image.random_crop(x,[1,self.patches,self.patches,3])
     x = self.conv(x)
     x = self.activation(x)
 
