@@ -37,8 +37,7 @@ class Discriminator(tf.keras.Model):
   def __init__(self, patches):
     super(Discriminator, self).__init__()
 
-    self.patches = patches
-    print(self.patches)
+    self.patch = patches
     #70 x70 PatchGan
     #Zhu et al: C64-C128-C256-C512
     #C64: 4 × 4 Convolution-InstanceNorm-LeakyReLU layer with 64 filters and stride 2.
@@ -70,7 +69,8 @@ class Discriminator(tf.keras.Model):
 
   def call(self,x):
     #patch into pieces of 70*70
-    x = tf.image.random_crop(x,[1,self.patches, self.patches,3])
+    print(self.patch)
+    x = tf.image.random_crop(x,[1, self.patch, self.patch,3])
     x = self.conv(x)
     x = self.activation(x)
 
