@@ -14,7 +14,7 @@ class ConvoBlock(tf.keras.layers.Layer):
     self.conv = tf.keras.layers.Conv2D(filters=nr_filters, kernel_size = 4, strides=strides, padding = 'same',
                            kernel_initializer = kernel_initializer)
 
-    self.norm_layer = tf.layers.BatchNormalization()
+    self.norm_layer = tf.keras.layers.BatchNormalization()
 
     #Zhu et al. use leaky ReLUs with a slope of 0.2.
     self.activation = tf.keras.layers.LeakyReLU(0.2)

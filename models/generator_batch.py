@@ -27,7 +27,7 @@ class ResidualBlock(tf.keras.layers.Layer):
                                          )
 
     #instance normalization as batch size is 1
-    self.batch_1 = tf.layers.BatchNormalization()
+    self.batch_1 = tf.keras.layers.BatchNormalization()
 
     self.relu_1 = tf.keras.layers.ReLU()
 
@@ -36,7 +36,7 @@ class ResidualBlock(tf.keras.layers.Layer):
                                          kernel_initializer = kernel_initializer
                                         # padding = 'same'
                                          )
-    self.batch_2 = tf.layers.BatchNormalization()
+    self.batch_2 = tf.keras.layers.BatchNormalization()
 
     self.relu_2 = tf.keras.layers.ReLU()
 
@@ -68,7 +68,7 @@ class DownsampleBlock(tf.keras.layers.Layer):
 
     self.conv = tf.keras.layers.Conv2D(nr_filters, kernel_size= kernel_size, strides = stride,
                                        padding=padding, kernel_initializer = kernel_initializer)
-    self.norm_layer = tf.layers.BatchNormalization()
+    self.norm_layer = tf.keras.layers.BatchNormalization()
 
     self.activation = tf.keras.layers.LeakyReLU()
 
@@ -93,7 +93,7 @@ class UpsampleBlock(tf.keras.layers.Layer):
 
     self.conv = tf.keras.layers.Conv2DTranspose(nr_filters, kernel_size= kernel_size, strides = stride,
                                        padding='same', kernel_initializer = kernel_initializer)
-    self.norm_layer = tf.layers.BatchNormalization()
+    self.norm_layer = tf.keras.layers.BatchNormalization()
 
     self.activation = tf.keras.layers.LeakyReLU()
 
