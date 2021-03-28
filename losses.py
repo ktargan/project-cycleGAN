@@ -1,5 +1,5 @@
 import tensorflow as tf
-binary_cross_loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+BCE = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 # for neural style transfer: "try to capture correspondences between higher-level appearance structures"
 
 #cycle consistency loss: used as a way to introduce a sort of supervision
@@ -37,13 +37,13 @@ def identity_loss(real_image, same_image, lamba):
 
 
 def bce_gen_loss(prediction):
-  gen_loss =  binary_cross_loss(tf.ones_like(prediction), prediction)
+  gen_loss =  BCE(tf.ones_like(prediction), prediction)
   return gen_loss
 
 def bce_discrim_loss(generated_image, real_image):
   #real_img_labels: should have been predicted as ones
   #fake as 0s
   #binary corss entropy loss
-  real_loss = binary_cross_loss(tf.ones_like(real_image), real_image)
-  fake_loss = binary_cross_loss(tf.zeros_like(generated_image), generated_image)
+  real_loss = BCE(tf.ones_like(real_image), real_image)
+  fake_loss = bBCE(tf.zeros_like(generated_image), generated_image)
   return (real_loss + fake_loss)*0.5

@@ -134,15 +134,13 @@ class Generator(tf.keras.Model):
 
     self.strided_block = [
       #Johnson: 32 x9 x9 conv, stride 1 -> 32×128×128
-      #but in the cycle gan paper use 7x7, 64
+      #but in the cycle gan paper use 7x7, 64x128x128
       DownsampleBlock(nr_filters =64, kernel_size = 7, stride = 1, padding = 'valid', kernel_initializer = kernel_initializer),
 
-      #Johnson: 64×3×3, conv, stride 2 -> 64×64×64
-      #Zhu: 128x3x3
+      #Zhu: 128×3×3, conv, stride 2 -> 128×64×64
       DownsampleBlock(nr_filters =128, kernel_size = 3, stride = 2, padding = 'same',kernel_initializer = kernel_initializer),
 
-      #Johnson: 128×3×3 conv, stride 2 -> 128×32×32
-      #Zhu: 256
+      #Zhu: 256×3×3 conv, stride 2 -> 256×32×32
       DownsampleBlock(nr_filters =256, kernel_size = 3, stride = 2, padding = 'same', kernel_initializer = kernel_initializer)
     ]
 
@@ -157,21 +155,20 @@ class Generator(tf.keras.Model):
     ]
 
     self.transposed_block = [
-      #64×3×3 conv, stride 1/2 -> 64×64×64
+      #128×3×3 conv, stride 1/2 -> 128×64×64
       UpsampleBlock(128,3,2, kernel_initializer),
-      #32×3×3 conv, stride 1/2 -> 32×128×128
+      #64×3×3 conv, stride 1/2 -> 64×128×128
       UpsampleBlock(64,3,2, kernel_initializer),
     ]
-    #padding:
+    #padding: to keep size correct after next covolution
     self.padd2 = layers.ReflectionPadding2D(padding=(self.padds, self.padds))
 
-    #3×9×9 conv, stride 1 3×128×128
-    #Johnson et al. use scaled tanh (?) elsewhere use relu?
+    #3×7×7 conv, stride 1 -> 3×128×128
+    #Johnson et al. use scaled tanh
     self.final_layer = tf.keras.layers.Conv2D(filters=3, kernel_size=7,
                                              strides =1, activation = tf.keras.activations.tanh,
                                              padding = 'valid', kernel_initializer = kernel_initializer)
 
-    #self.concat = tf.keras.layers.Concatenate()
 
   def call(self, x):
     x = self.padd1(x)
