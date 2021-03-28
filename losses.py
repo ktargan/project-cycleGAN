@@ -8,7 +8,7 @@ def calc_cycle_loss(real_image, cycled_image, lambda):
   #summed up distances between generated images and real starting image
   loss1 = tf.math.reduce_mean(tf.math.abs(real_image - cycled_image))
 
-  return lambda * loss1
+  return (lambda * loss1)
 
 #adversarial loss
 # match distribution of generated images to target (ground truth) distribution
@@ -33,7 +33,7 @@ def discriminator_loss(generated_image, real_image):
 # check if the generator of domain_A keeps the image of domain_A similar
 def identity_loss(real_image, same_image, lambda):
   loss = tf.reduce_mean(tf.abs(real_image - same_image))
-  return lambda* 0.5 * loss
+  return (lambda* 0.5 * loss)
 
 
 def bce_gen_loss(prediction):
