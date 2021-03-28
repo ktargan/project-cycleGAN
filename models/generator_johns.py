@@ -44,7 +44,7 @@ class ResidualBlock(tf.keras.layers.Layer):
 
   def call(self, start_x):
     #x = self.padd1(start_x)
-    x = self.conv_1(x)
+    x = self.conv_1(start_x)
     x = self.batch_1(x)
 
     x = self.relu_1(x)
