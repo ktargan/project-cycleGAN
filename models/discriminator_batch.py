@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow_addons as tfa
 
 
-'''Convolutional Block that combines a Convlayer with InstanceNorm and leakyReLU
+'''Convolutional Block that combines a Convlayer with BatchNorm and leakyReLU
 
   Keyword Arguments: Arguments needed for Convolutional layer
   '''

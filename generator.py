@@ -43,13 +43,11 @@ class ResidualBlock(tf.keras.layers.Layer):
     self.relu_2 = tf.keras.layers.ReLU()
 
   def call(self, start_x):
-    #x = tf.pad(start_x,[[0, 0], [1, 1], [1, 1], [0, 0]], "REFLECT")
     x = self.padd1(start_x)
     x = self.conv_1(x)
     x = self.batch_1(x)
 
     x = self.relu_1(x)
-    #x = tf.pad(x,[[0, 0], [1, 1], [1, 1], [0, 0]], "REFLECT")
     x = self.padd2(x)
     x = self.conv_2(x)
     x = self.batch_2(x)

@@ -5,7 +5,7 @@ import layers
 
 '''Defines a Block as used in the ResNet architecture
   2 covolutional layers
-  InstanceNormalization (instead of Batchnorm)
+  Batchnormalization
   Reflection Padding
 
   Keyword Arguments:
@@ -58,7 +58,7 @@ class ResidualBlock(tf.keras.layers.Layer):
 
 
 '''Block used for downsampling images/featuremaps with strided convolutions
-  Convolutional layer, Instance Normalization, LeakyReLU activation
+  Convolutional layer, Batch Normalization, LeakyReLU activation
 
   Keyword Arguments:
   parameters needed to define convolutional layer'''
@@ -83,7 +83,7 @@ class DownsampleBlock(tf.keras.layers.Layer):
 
 
 '''Block used for upsampling images with fractionally strided convolution,
-  TransposedConvolutional layer, Instance Normalization, LeakyReLU activation
+  TransposedConvolutional layer, Batch Normalization, LeakyReLU activation
 
   Keyword Arguments:
   parameters needed to define convolutional layer'''

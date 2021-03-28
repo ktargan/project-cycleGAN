@@ -4,11 +4,11 @@ binary_cross_loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
 #cycle consistency loss: used as a way to introduce a sort of supervision
 #both Generators should work consistently
-def calc_cycle_loss(real_image, cycled_image):
+def calc_cycle_loss(real_image, cycled_image, lambda):
   #summed up distances between generated images and real starting image
   loss1 = tf.math.reduce_mean(tf.math.abs(real_image - cycled_image))
 
-  return 10 * loss1
+  return lambda * loss1
 
 #adversarial loss
 # match distribution of generated images to target (ground truth) distribution
@@ -31,14 +31,15 @@ def discriminator_loss(generated_image, real_image):
   return (real_loss + fake_loss)*0.5
 
 # check if the generator of domain_A keeps the image of domain_A similar
-def identity_loss(real_image, same_image):
+def identity_loss(real_image, same_image, lambda):
   loss = tf.reduce_mean(tf.abs(real_image - same_image))
-  return 10* 0.5 * loss
+  return lambda* 0.5 * loss
+
 
 def bce_gen_loss(prediction):
   gen_loss =  binary_cross_loss(tf.ones_like(prediction), prediction)
   return gen_loss
-  
+
 def bce_discrim_loss(generated_image, real_image):
   #real_img_labels: should have been predicted as ones
   #fake as 0s

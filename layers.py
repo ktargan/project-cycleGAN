@@ -1,6 +1,8 @@
 import tensorflow as tf
 
-#code from keras cycle gan
+#code from keras cycle gan: (reference)
+#Nain, A. K. (2020, August 12). Keras documentation: CycleGAN.
+#Keras. https://keras.io/examples/generative/cyclegan/.
 class ReflectionPadding2D(tf.keras.layers.Layer):
     """Implements Reflection Padding as a layer.
 
