@@ -13,7 +13,7 @@ import layers
   kernel_initializer: how to inititialize the weights
 '''
 class ResidualBlock(tf.keras.layers.Layer):
-  def __init__(self, nr_filters, kernel_initializer):
+  def __init__(self, nr_filters, kernel_initializer, size):
     super(ResidualBlock,self).__init__()
 
     #use padding to keep the featuremap size constant even after applying convolutions
@@ -40,6 +40,9 @@ class ResidualBlock(tf.keras.layers.Layer):
     self.batch_2 = tfa.layers.InstanceNormalization(
             gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
+    self.crop = tf.keras.layers.experimental.preprocessing.CenterCrop(height=size, width = size)
+
+
     self.relu_2 = tf.keras.layers.ReLU()
 
   def call(self, start_x):
@@ -52,6 +55,7 @@ class ResidualBlock(tf.keras.layers.Layer):
     x = self.conv_2(x)
     x = self.batch_2(x)
     # skip connections are used: add up the input to block to its output
+    start_x = self.crop(start_x)
     x = x + start_x
     x = self.relu_2(x)
     return x
@@ -145,11 +149,16 @@ class Generator(tf.keras.Model):
 
     #Residual blocks -> 5 in Johnson architecture
     self.blocks = [
-      ResidualBlock(128, kernel_initializer = kernel_initializer),
-      ResidualBlock(128, kernel_initializer = kernel_initializer),
-      ResidualBlock(128, kernel_initializer = kernel_initializer),
-      ResidualBlock(128, kernel_initializer = kernel_initializer),
-      ResidualBlock(128, kernel_initializer = kernel_initializer),
+        # -> 128 x 28 x28
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 28),
+      # 128 x24 x24
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 24),
+      # 128 x 20 x20
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 20),
+      # 128 x 16 x16
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 16),
+      # 128 x 12 x12
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 12),
     ]
 
     self.transposed_block = [
@@ -167,7 +176,6 @@ class Generator(tf.keras.Model):
                                              strides =1, activation = tf.keras.activations.tanh,
                                              padding = 'same', kernel_initializer = kernel_initializer)
 
-    #self.concat = tf.keras.layers.Concatenate()
 
   def call(self, x):
     x = self.padd1(x)
