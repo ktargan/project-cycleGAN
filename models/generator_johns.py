@@ -134,35 +134,35 @@ class Generator(tf.keras.Model):
     self.padd1 = layers.ReflectionPadding2D(padding=(40, 40))
 
     self.strided_block = [
-      #Johnson: 32 x9 x9 conv, stride 1 -> 32×128×128
+      #Johnson: 32 x9 x9 conv, stride 1 -> 32× 208×208
       #but in the cycle gan paper use 7x7, 64
       DownsampleBlock(nr_filters =32, kernel_size = 9, stride = 1, padding = 'same', kernel_initializer = kernel_initializer),
 
-      #Johnson: 64×3×3, conv, stride 2 -> 64×64×64
+      #Johnson: 64×3×3, conv, stride 2 -> 64×104× 104
       #Zhu: 128x3x3
       DownsampleBlock(nr_filters = 64,kernel_size = 3, stride = 2, padding = 'same',kernel_initializer = kernel_initializer),
 
-      #Johnson: 128×3×3 conv, stride 2 -> 128×32×32
+      #Johnson: 128×3×3 conv, stride 2 -> 128×52x52
       #Zhu: 256
       DownsampleBlock(nr_filters =128, kernel_size = 3, stride = 2, padding = 'same', kernel_initializer = kernel_initializer)
     ]
 
     #Residual blocks -> 5 in Johnson architecture
     self.blocks = [
-        # -> 128 x 28 x28
-      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 28),
-      # 128 x24 x24
-      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 24),
-      # 128 x 20 x20
-      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 20),
-      # 128 x 16 x16
-      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 16),
-      # 128 x 12 x12
-      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 12),
+        # -> 128 x 48 x48
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 48),
+      # 128 x 44 x44
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 44),
+      # 128 x 40x40
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 40),
+      # 128 x 36 x 36
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 36),
+      # 128 x 32 x32
+      ResidualBlock(128, kernel_initializer = kernel_initializer, size = 32),
     ]
 
     self.transposed_block = [
-      #64×3×3 conv, stride 1/2 -> 64×64×64
+      #64×3×3 conv, stride 1/2 -> 64×64 x64
       UpsampleBlock(64,3,2, kernel_initializer),
       #32×3×3 conv, stride 1/2 -> 32×128×128
       UpsampleBlock(32,3,2, kernel_initializer),
