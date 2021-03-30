@@ -8,12 +8,15 @@ import tensorflow_addons as tfa
   Keyword Arguments: Arguments needed for Convolutional layer
   '''
 class ConvoBlock(tf.keras.layers.Layer):
-  def __init__(self,nr_filters, strides, kernel_initializer):
+  def __init__(self, nr_filters, strides, kernel_initializer):
     super(ConvoBlock, self).__init__()
 
     self.conv = tf.keras.layers.Conv2D(filters=nr_filters, kernel_size = 4, strides=strides, padding = 'same',
                            kernel_initializer = kernel_initializer)
-
+    
+    #Instancenorm normalizes the feature channels of each image of a batch seperatly along 
+    #its spatial dimensions. The gamma_initializer sets the initial weights of the layer
+    #to a normla distribution with mean at 0 and standard deviation at 0.02.
     self.norm_layer = tfa.layers.InstanceNormalization(
             gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
@@ -50,7 +53,8 @@ class Discriminator(tf.keras.Model):
                            kernel_initializer = kernel_initializer)
     #Zhu et al. use leaky ReLUs with a slope of 0.2.
     self.activation = tf.keras.layers.LeakyReLU(0.2)
-
+	
+    #Three more convolutional layers with 128, 256 and 512 filters, stride two and Instancenorm
     self.layering = [
       #second layer 128 filters
       ConvoBlock(128, 2, kernel_initializer),
