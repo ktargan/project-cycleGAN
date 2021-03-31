@@ -15,7 +15,7 @@ def get_fantasy(path):
     for i in range(30):
       fantasy_dataset_1 = fantasy_dataset_1.concatenate(fantasy_dataset.map(lambda image: tf.image.resize(image,[128,128])))
 
-      for i in range(40):
+    for i in range(40):
       fantasy_dataset_1 = fantasy_dataset_1.concatenate(fantasy_dataset.map(lambda image: tf.image.random_crop(image,[1,128,128,3])))
 
       return fantasy_dataset_1
