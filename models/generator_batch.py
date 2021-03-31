@@ -164,12 +164,10 @@ class Generator(tf.keras.Model):
     self.padd2 = layers.ReflectionPadding2D(padding=(self.padds, self.padds))
 
     #3×9×9 conv, stride 1 3×128×128
-    #Johnson et al. use scaled tanh (?) elsewhere use relu?
     self.final_layer = tf.keras.layers.Conv2D(filters=3, kernel_size=7,
                                              strides =1, activation = tf.keras.activations.tanh,
                                              padding = 'valid', kernel_initializer = kernel_initializer)
 
-    #self.concat = tf.keras.layers.Concatenate()
 
   def call(self, x, training):
     x = self.padd1(x)

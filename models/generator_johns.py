@@ -54,7 +54,9 @@ class ResidualBlock(tf.keras.layers.Layer):
     #x = self.padd2(x)
     x = self.conv_2(x)
     x = self.batch_2(x)
-    # skip connections are used: add up the input to block to its output
+    # skip connections are used: add up the input of the block to its output
+    # but first the input needs to be cropped as the output is smaller in max_size
+    # (Johnson et al. do not use padding in residual blocks)
     start_x = self.crop(start_x)
     x = x + start_x
     x = self.relu_2(x)
@@ -171,7 +173,7 @@ class Generator(tf.keras.Model):
     #self.padd2 = layers.ReflectionPadding2D(padding=(self.padds, self.padds))
 
     #3×9×9 conv, stride 1 3×128×128
-    #Johnson et al. use scaled tanh (?) elsewhere use relu?
+    #Johnson et al. use tanh
     self.final_layer = tf.keras.layers.Conv2D(filters=3, kernel_size=9,
                                              strides =1, activation = tf.keras.activations.tanh,
                                              padding = 'same', kernel_initializer = kernel_initializer)

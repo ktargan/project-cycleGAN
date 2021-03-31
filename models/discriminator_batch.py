@@ -31,6 +31,7 @@ class ConvoBlock(tf.keras.layers.Layer):
   architecture based on Zhu et al.,
 
   Keyword Arguments:
+   patches - the size of the image patches the discriminator works on
   '''
 class Discriminator(tf.keras.Model):
   def __init__(self, patches):
