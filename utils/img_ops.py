@@ -38,3 +38,25 @@ def plot_image_cycle(generator_1, generator_2, dataset1, dataset2, ablation = Fa
     gen_images = generator_2(image_batch)
     gen_images_back = generator_1(gen_images)
     plot(image_batch, gen_images, gen_images_back, title = "Generator 2 cycle: ")
+
+
+def generate_images(generator_1, generator_2, dataset1, dataset2):
+  #generate two images for transformations for each domain
+  #will be used to show sample images in tensorboard
+  #returns the original image and the corresponding generated image
+
+  # image generation from domain of dataset2  to dataset1
+  for image_batch in dataset2.take(1):
+    image1 = image_batch
+    #generate image
+    gen_image1 = generator_1(image_batch)
+
+  # image generation from domain of dataset2  to dataset1
+  for image_batch in dataset1.take(1):
+    image2 = image_batch
+    #generate image
+    gen_image2 = generator_2(image_batch)
+  
+  return image1, gen_image1, image2, gen_image2
+
+
