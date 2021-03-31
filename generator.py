@@ -19,14 +19,16 @@ class ResidualBlock(tf.keras.layers.Layer):
     #use padding to keep the featuremap size constant even after applying convolutions
     self.padd1 = layers.ReflectionPadding2D()
 
-    #3x3 conv, normalization, relu, 3x3 conv, normalization, relu
+    #3x3 conv, normalization, relu, 3x3 conv, instance normalization, relu
     self.conv_1 = tf.keras.layers.Conv2D(filters = nr_filters, kernel_size = 3,
                                          kernel_initializer = kernel_initializer
                                         #kernel_regularizer = tf.keras.regularizers.l2(0.01),
                                          #padding = 'same'
                                          )
 
-    #instance normalization as batch size is 1
+    #Instancenorm normalizes the feature channels of each image of a batch seperatly along 
+    #its spatial dimensions. The gamma_initializer sets the initial weights of the layer
+    #to a normla distribution with mean at 0 and standard deviation at 0.02.
     self.batch_1 = tfa.layers.InstanceNormalization(
           gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
@@ -68,6 +70,7 @@ class DownsampleBlock(tf.keras.layers.Layer):
 
     self.conv = tf.keras.layers.Conv2D(nr_filters, kernel_size= kernel_size, strides = stride,
                                        padding=padding, kernel_initializer = kernel_initializer)
+
     self.norm_layer = tfa.layers.InstanceNormalization(
             gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 

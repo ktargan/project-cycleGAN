@@ -45,5 +45,5 @@ def bce_discrim_loss(generated_image, real_image):
   #fake as 0s
   #binary corss entropy loss
   real_loss = BCE(tf.ones_like(real_image), real_image)
-  fake_loss = bBCE(tf.zeros_like(generated_image), generated_image)
+  fake_loss = BCE(tf.zeros_like(generated_image), generated_image)
   return (real_loss + fake_loss)*0.5
