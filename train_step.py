@@ -1,3 +1,5 @@
+import tensorflow as tf
+
 #module defines training step for generator and discriminator
 #variable names are defined in relation to the horse2zebra dataset to be more understandable
 
