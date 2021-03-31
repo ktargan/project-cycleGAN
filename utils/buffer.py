@@ -15,15 +15,25 @@ class Buffer():
     self.next_index = 0
 
   def get_image_buffer(self):
-    #return one of the images at random
+    #either return one of the images at random:
     #random_id = np.random.randint(0, self.max_size - 1)
     #return [self.buffer_list[random_id]]
+
+    #or return the whole list
     return self.buffer_list
 
   #adds images to the buffer
   def set_image_buffer(self,generated_image):
   #saves generated images to the image_buffer
     for image in generated_image:
+    # saves images at the last specified index to be able to retrieve the latest images
+      if self.next_index >= self.max_size:
+          self.next_index = 0
+
+      self.buffer_list[self.next_index] = image
+      self.next_index += 1
+
+     #alternatively store the images randomly
       #if self.buffer.length < self.max_size:
       #  buffer.append(image)
       #else:
@@ -32,8 +42,3 @@ class Buffer():
         #  if p > 0.5:
          #   random_id = random.randint(0, self.max_size - 1)
           #  self.buffer[random_id] = image
-      if self.next_index >= self.max_size:
-          self.next_index = 0
-
-      self.buffer_list[self.next_index] = image
-      self.next_index += 1

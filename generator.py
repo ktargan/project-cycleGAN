@@ -26,7 +26,7 @@ class ResidualBlock(tf.keras.layers.Layer):
                                          #padding = 'same'
                                          )
 
-    #Instancenorm normalizes the feature channels of each image of a batch seperatly along 
+    #Instancenorm normalizes the feature channels of each image of a batch seperatly along
     #its spatial dimensions. The gamma_initializer sets the initial weights of the layer
     #to a normla distribution with mean at 0 and standard deviation at 0.02.
     self.batch_1 = tfa.layers.InstanceNormalization(
