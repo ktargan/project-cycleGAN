@@ -7,7 +7,7 @@ The project has been adopted as part of a university course assignment and is co
 * [Technical details](#technical-details)
 * [CycleGAN according to Zhu et al.](#cycle-gan)
 * [Setup](#setup)
-* [References] (#references)
+* [References](#references)
 
 ## Technologies
 Our project was created with:
