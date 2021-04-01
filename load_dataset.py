@@ -21,14 +21,14 @@ def get_fantasy(path,batchsize):
     for i in range(40):
       fantasy_dataset_1 = fantasy_dataset_1.concatenate(fantasy_dataset.map(lambda image: tf.image.random_crop(image,[1,128,128,3])))
 
-    fantasy_datase = fantasy_dataset_1.map(lambda image: tf.image.random_flip_left_right(image))
+    fantasy_dataset = fantasy_dataset_1.map(lambda image: tf.image.random_flip_left_right(image))
 
     # images are normalizied to [-1, 1]
-    fantasy_datase = fantasy_datase.map(lambda image: (image/127.5)-1)
+    fantasy_dataset = fantasy_dataset.map(lambda image: (image/127.5)-1)
 
     #Zhu et al. use a batchsize of 1
-    fantasy_datase = fantasy_datase.shuffle(buffer_size = 1000)
-    fantasy_datase = fantasy_datase.prefetch(8)
+    fantasy_dataset = fantasy_dataset.shuffle(buffer_size = 1000)
+    fantasy_dataset = fantasy_dataste.prefetch(8)
 
     return fantasy_dataset
 
