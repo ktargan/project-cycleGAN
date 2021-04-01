@@ -56,23 +56,32 @@ def plot_to_tf_image(generator_1, generator_2, dataset_1, dataset_2):
     # Generate image transformed from domain 1 to domain 2 and the other way around
     gen_image_1 = generator_1(img_2)
     gen_image_2 = generator_2(img_1)
+    # Backward cycle
+    gen_image_back_1 = generator_1(gen_image_2)
+    gen_image_back_2 = generator_2(gen_image_1)
 
     # Create a figure that will contain our plot
-    figure = plt.figure(figsize=(20,20))
+    figure = plt.figure(figsize=(15,10))
     # Specifies the index on the grid
-    ax = plt.subplot(2, 2, 1)
+    ax = plt.subplot(2, 3, 1)
     # Squee to eliminate the batchsize dimension. 
     # Mutiply image by 0.5 and add 0.5 to undo the normalization
     plt.imshow(tf.squeeze(tf.image.convert_image_dtype(img_2*0.5 +0.5, dtype= tf.uint8)))
     plt.axis('off')
-    ax = plt.subplot(2, 2, 2)
+    ax = plt.subplot(2, 3, 2)
     plt.imshow(tf.squeeze(tf.image.convert_image_dtype(gen_image_1*0.5 +0.5, dtype= tf.uint8)))
     plt.axis('off')
-    ax = plt.subplot(2, 2, 3)
+    ax = plt.subplot(2, 3, 3)
+    plt.imshow(tf.squeeze(tf.image.convert_image_dtype(gen_image_back_2*0.5 +0.5, dtype= tf.uint8)))
+    plt.axis('off')
+    ax = plt.subplot(2, 3, 4)
     plt.imshow(tf.squeeze(tf.image.convert_image_dtype(img_1*0.5 +0.5, dtype= tf.uint8)))
     plt.axis('off')
-    ax = plt.subplot(2, 2, 4)
+    ax = plt.subplot(2, 3, 5)
     plt.imshow(tf.squeeze(tf.image.convert_image_dtype(gen_image_2*0.5 +0.5, dtype= tf.uint8)))
+    plt.axis('off')
+    ax = plt.subplot(2, 3, 6)
+    plt.imshow(tf.squeeze(tf.image.convert_image_dtype(gen_image_back_1*0.5 +0.5, dtype= tf.uint8)))
     plt.axis('off')
 
     # We copied the section below for converting the figure to PNG 
