@@ -1,6 +1,6 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import io
+from io import BytesIO
 
 def plot(image_batch, gen_images, gen_images_back, title):
   #plots 3 images next to each other, original, generated and backwards generated
@@ -80,7 +80,7 @@ def plot_to_tf_image(generator_1, generator_2, dataset_1, dataset_2):
     # https://www.tensorflow.org/tensorboard/image_summaries#visualizing_multiple_images
 
     # Save the plot to a PNG in memory.
-    buf = io.BytesIO()
+    buf = BytesIO()
     plt.savefig(buf, format='png')
     # Closing the figure prevents it from being displayed directly inside
     # the notebook.
