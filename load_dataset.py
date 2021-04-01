@@ -28,6 +28,9 @@ def get_custom(path,batchsize):
     fantasy_dataset = tf.keras.preprocessing.image_dataset_from_directory(path, image_size= (220,220),
                                 label_mode= None, shuffle = False, batch_size =batchsize)
 
+    if fantasy_dataset.len() > 25:
+        print("dataset too large")
+        break
     #For us these training sets were small (12-24 images)
     #thus we filled up our datasets with either exact copies or crops of the images, so:
     #Copy images in style refernce / fantasy dataset: and randomly crop some of the copies
