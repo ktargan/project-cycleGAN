@@ -2,8 +2,10 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 
 def get_oranges(batchsize):
+    #loads the orange dataset used for CycleGAN apple2orange
     train_oranges, test_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB', 'testB[:30]'], as_supervised=True)
 
+    #pass dataset through pipeline
     train_oranges = preprocessing(train_oranges, batchsize, do_flip = True)
     test_oranges = preprocessing(test_oranges, batchsize, do_flip = False)
     return train_oranges, test_oranges
