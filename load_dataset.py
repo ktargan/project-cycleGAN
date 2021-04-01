@@ -40,27 +40,27 @@ def get_horses(batchsize):
     return train_horses, train_zebras, test_horses, test_zebras
 
 #definition of further preprocessing steps
-def preprocessing(dataset, batchsize, do_resize, has_label, do_flip):
+def preprocessing(imageset, batchsize, do_resize, has_label, do_flip):
 
     if do_resize:
         #resize image to smaller size (faster computation and thus more manageable for the scope of the task)
         #firstly by simply resizing and secondly randomly cropping the resulting images (introduces variation)
         if has_label:
-            dataset = dataset.map(lambda image, label: tf.image.resize(image,[135,135]))
+            image_set = image_set.map(lambda image, label: tf.image.resize(image,[135,135]))
         else:
-            dataset = dataset.map(lambda image: tf.image.resize(image,[135,135]))
-        dataset = dataset.map(lambda image: tf.image.random_crop(image,[128,128,3]))
+            image_set = image_set.map(lambda image: tf.image.resize(image,[135,135]))
+        image_set = image_set.map(lambda image: tf.image.random_crop(image,[128,128,3]))
 
     if do_flip:
         #randomly decide to mirror images (make sure that they do not all face the same direction for one class)
-        dataset = dataset.map(lambda image: tf.image.random_flip_left_right(image))
+        image_set = image_set.map(lambda image: tf.image.random_flip_left_right(image))
 
     # images are normalizied to [-1, 1]
-    dataset = dataset.map(lambda image: (image/127.5)-1)
+    image_set = image_set.map(lambda image: (image/127.5)-1)
 
     #Zhu et al. use a batchsize of 1
-    dataset = dataset.shuffle(buffer_size = 1000)
-    dataset = dataset.batch(batchsize)
-    dataset = dataset.prefetch(8)
+    image_set = image_set.shuffle(buffer_size = 1000)
+    image_set = image_set.batch(batchsize)
+    image_set = image_set.prefetch(8)
 
-    return dataset
+    return image_set
