@@ -30,7 +30,7 @@ def training_step_gen(generator_zebras, generator_horses, discriminator_zebras, 
 
     #feed original images to generators
     fake_images_zebras = generator_zebras(images_horses)
-    fake_images_horses = generator_horses(images_pattern)
+    fake_images_horses = generator_horses(images_zebras)
 
     #get the assigned predicition from the discriminators
     fake_image_predictions_zebras = discriminator_zebras(fake_images_zebras)
