@@ -5,7 +5,7 @@ def get_oranges(batchsize):
     train_oranges, test_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB', 'testB[:30]'], as_supervised=True)
 
     train_oranges = preprocessing(train_oranges, batchsize, do_resize = True, has_label = True, do_flip = True)
-    #test_oranges = preprocessing(test_oranges, batchsize, do_resize = True, has_label = True, do_flip = False)
+    test_oranges = preprocessing(test_oranges, batchsize, do_resize = True, has_label = True, do_flip = False)
     return train_oranges, test_oranges
 
 def get_fantasy(path,batchsize):
