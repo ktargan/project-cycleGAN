@@ -2,12 +2,11 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 
 def get_oranges(batchsize):
-    train_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB'], as_supervised=True)
-
-    print("Train_oranges")
+    train_oranges, test_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB', 'testB[:30]'], as_supervised=True)
 
     train_oranges = preprocessing(train_oranges, batchsize, do_resize = True, has_label = True, do_flip = True)
-    return train_oranges
+    test_oranges = preprocessing(test_oranges, batchsize, do_resize = True, has_label = True, do_flip = False)
+    return train_oranges, test_oranges
 
 def get_fantasy(path,batchsize):
     fantasy_dataset = tf.keras.preprocessing.image_dataset_from_directory(path, image_size= (220,220),
