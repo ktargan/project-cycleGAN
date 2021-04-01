@@ -24,20 +24,19 @@ def get_horses(batchsize):
     test_zebras = preprocessing(test_zebras, batchsize,  do_flip = False)
     return train_horses, train_zebras, test_horses, test_zebras
 
-def get_custom(path,batchsize):
+def get_custom(path,batchsize, copy_times):
     fantasy_dataset = tf.keras.preprocessing.image_dataset_from_directory(path, image_size= (220,220),
                                 label_mode= None, shuffle = False, batch_size =batchsize)
 
-    if fantasy_dataset.len() > 10:
-        raise ValueError('Dataset is too large! Try again with a smaller dataset.')
+
     #For us these training sets were small (12-24 images)
     #thus we filled up our datasets with either exact copies or crops of the images, so:
     #Copy images in style refernce / fantasy dataset: and randomly crop some of the copies
     fantasy_dataset_1 = fantasy_dataset.map(lambda image: tf.image.resize(image,[128,128]))
-    for i in range(30):
+    for i in range(copy_times/2):
       fantasy_dataset_1 = fantasy_dataset_1.concatenate(fantasy_dataset.map(lambda image: tf.image.resize(image,[128,128])))
 
-    for i in range(40):
+    for i in range(copy_times/2):
       fantasy_dataset_1 = fantasy_dataset_1.concatenate(fantasy_dataset.map(lambda image: tf.image.random_crop(image,[1,128,128,3])))
 
     fantasy_dataset = fantasy_dataset_1.map(lambda image: tf.image.random_flip_left_right(image))
