@@ -1,6 +1,11 @@
 import tensorflow as tf
 import tensorflow_datasets as tfds
 
+'''Function loads a oranges from apple2orange dataset and starts preprocessing
+
+    Keyword arguments:
+    batchsize
+'''
 def get_oranges(batchsize):
     #loads the orange dataset used for CycleGAN apple2orange
     train_oranges, test_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB', 'testB[:30]'], as_supervised=True)
@@ -10,6 +15,11 @@ def get_oranges(batchsize):
     test_oranges = preprocessing(test_oranges, batchsize, do_flip = False)
     return train_oranges, test_oranges
 
+'''Function load a horse2zebra dataset and starts preprocessing
+
+    Keyword arguments:
+    batchsize
+'''
 def get_horses(batchsize):
     train_horses, train_zebras, test_horses, test_zebras = tfds.load('cycle_gan/horse2zebra',
                                                                  split = ['trainA','trainB', 'testA[:30]', 'testB[:30]'],
@@ -24,6 +34,13 @@ def get_horses(batchsize):
     test_zebras = preprocessing(test_zebras, batchsize,  do_flip = False)
     return train_horses, train_zebras, test_horses, test_zebras
 
+'''Function will load a custom dataset and preprocess it.
+
+    Keyword arguments:
+    path to load from
+    batchsize
+    copy_times : how often shall the small dataset be copied and augmented to create larger datset
+'''
 def get_custom(path,batchsize, copy_times):
     fantasy_dataset = tf.keras.preprocessing.image_dataset_from_directory(path, image_size= (220,220),
                                 label_mode= None, shuffle = False, batch_size =batchsize)
@@ -51,7 +68,12 @@ def get_custom(path,batchsize, copy_times):
     return fantasy_dataset
 
 
-#definition of further preprocessing steps
+'''Function defines input pipeline for preprocessing
+
+    Keyword arguments:
+    batchsize
+    do_flip: boolean that indicates if the dataset should be augemented by flipping images
+'''
 def preprocessing(image_set, batchsize, do_flip):
 
     #resize image to smaller size (faster computation and thus more manageable for the scope of the task)

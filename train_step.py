@@ -3,7 +3,6 @@ import losses
 
 #module defines training step for generator and discriminator
 #variable names are defined in relation to the horse2zebra dataset to be more understandable
-
 def training_step_discrim(discriminator, optimizer, images, generated_images):
   # calculate the discriminator loss and apply gradients
   with tf.GradientTape() as tape:
@@ -23,7 +22,7 @@ def training_step_discrim(discriminator, optimizer, images, generated_images):
 
 @tf.function
 def training_step_gen(generator_zebras, generator_horses, discriminator_zebras, discriminator_horses,
-                      images_zebras, images_horses, optimizer_zebras, optimizer_horses):
+                      images_zebras, images_horses, optimizer_zebras, optimizer_horses, lambda_factor):
   #clarification: generator_zebras generates zebra images from horses
   #Calculate the loss for both generators and update the weights
   with tf.GradientTape() as tape_horse, tf.GradientTape() as tape_zebra:
@@ -48,8 +47,8 @@ def training_step_gen(generator_zebras, generator_horses, discriminator_zebras, 
 
     #calculate cycle loss: the weighting factor lambda is set to 10
     #how much does the original image differ from the the cycled image
-    cycle_loss_forward = losses.calc_cycle_loss(images_zebras, recreated_images_zebras, 15)
-    cycle_loss_backward = losses.calc_cycle_loss(images_horses, recreated_images_horses, 15)
+    cycle_loss_forward = losses.calc_cycle_loss(images_zebras, recreated_images_zebras, lambda_factor)
+    cycle_loss_backward = losses.calc_cycle_loss(images_horses, recreated_images_horses, lambda_factor)
     total_cycle_loss = cycle_loss_forward + cycle_loss_backward
 
     #give images from their target domain to the generators
@@ -58,8 +57,8 @@ def training_step_gen(generator_zebras, generator_horses, discriminator_zebras, 
     same_images_reconstructed_zebras = generator_zebras(images_zebras)
     same_images_reconstructed_horses = generator_horses(images_horses)
 
-    identity_loss_horses = losses.identity_loss(images_horses, same_images_reconstructed_horses, 15)
-    identity_loss_zebras = losses.identity_loss(images_zebras, same_images_reconstructed_zebras, 15)
+    identity_loss_horses = losses.identity_loss(images_horses, same_images_reconstructed_horses, lambda_factor)
+    identity_loss_zebras = losses.identity_loss(images_zebras, same_images_reconstructed_zebras, lambda_factor)
 
     # sum up the losses for each generator
     # this means the respective generator and identity loss (for their domain)
