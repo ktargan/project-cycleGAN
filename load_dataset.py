@@ -91,6 +91,7 @@ def preprocessing(image_set, batchsize, do_variation):
         image_set = image_set.shuffle(buffer_size = 1000)
     else:
         image_set = image_set.map(lambda image, label: tf.image.resize(image,[128,128]))
+        image_set = image_set.map(lambda image: (image/127.5)-1)
     #Zhu et al. use a batchsize of 1
     image_set = image_set.batch(batchsize)
     image_set = image_set.prefetch(8)
