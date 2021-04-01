@@ -2,8 +2,7 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 
 def get_oranges(batchsize):
-    train_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB'],
-                                                                 as_supervised=True)
+    train_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB'], as_supervised=True)
 
     train_oranges = preprocessing(train_oranges, batchsize, do_resize = True, has_label = True, do_flip = True)
     return train_oranges
@@ -40,7 +39,7 @@ def get_horses(batchsize):
     return train_horses, train_zebras, test_horses, test_zebras
 
 #definition of further preprocessing steps
-def preprocessing(imageset, batchsize, do_resize, has_label, do_flip):
+def preprocessing(image_set, batchsize, do_resize, has_label, do_flip):
 
     if do_resize:
         #resize image to smaller size (faster computation and thus more manageable for the scope of the task)
