@@ -28,7 +28,7 @@ def get_fantasy(path,batchsize):
 
     #Zhu et al. use a batchsize of 1
     fantasy_dataset = fantasy_dataset.shuffle(buffer_size = 1000)
-    fantasy_dataset = fantasy_dataste.prefetch(8)
+    fantasy_dataset = fantasy_dataset.prefetch(8)
 
     return fantasy_dataset
 
