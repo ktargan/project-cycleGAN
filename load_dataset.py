@@ -33,10 +33,10 @@ def get_custom(path,batchsize, copy_times):
     #thus we filled up our datasets with either exact copies or crops of the images, so:
     #Copy images in style refernce / fantasy dataset: and randomly crop some of the copies
     fantasy_dataset_1 = fantasy_dataset.map(lambda image: tf.image.resize(image,[128,128]))
-    for i in range(int(copy_times/2)):
+    for i in range(int(round(copy_times/2))):
       fantasy_dataset_1 = fantasy_dataset_1.concatenate(fantasy_dataset.map(lambda image: tf.image.resize(image,[128,128])))
 
-    for i in range(int(copy_times/2)):
+    for i in range(int(round(copy_times/2))):
       fantasy_dataset_1 = fantasy_dataset_1.concatenate(fantasy_dataset.map(lambda image: tf.image.random_crop(image,[1,128,128,3])))
 
     fantasy_dataset = fantasy_dataset_1.map(lambda image: tf.image.random_flip_left_right(image))
