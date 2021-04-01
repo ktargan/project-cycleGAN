@@ -61,7 +61,7 @@ def plot_to_tf_image(generator_1, generator_2, dataset_1, dataset_2):
     gen_image_back_2 = generator_2(gen_image_1)
 
     # Create a figure that will contain our plot
-    figure = plt.figure(figsize=(30,20))
+    figure = plt.figure(figsize=(15,10))
     # Specifies the index on the grid
     ax = plt.subplot(2, 3, 1)
     # Squee to eliminate the batchsize dimension. 
