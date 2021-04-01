@@ -40,23 +40,57 @@ def plot_image_cycle(generator_1, generator_2, dataset1, dataset2, ablation = Fa
     plot(image_batch, gen_images, gen_images_back, title = "Generator 2 cycle: ")
 
 
-def generate_images(generator_1, generator_2, dataset1, dataset2):
-  #generate two images for transformations for each domain
-  #will be used to show sample images in tensorboard
-  #returns the original image and the corresponding generated image
+def plot_to_tf_image(generator_1, generator_2, dataset_1, dataset_2):
+  """Creates a 2x2 grid plot and converts it to one singe PNG image.
+  Arguments: dataset1, contains images of domain 1
+	     dataset_2,  contains images of domain 2
+             generator_1, translates images from domain 2 to domain 1 
+	       - i.e. generates domain 1 images
+  	     generator_2, translates images from domain 1 to domain 2 
+  Returns:   A png image converted to TF image"""  
 
-  # image generation from domain of dataset2  to dataset1
-  for image_batch in dataset2.take(1):
-    image1 = image_batch
-    #generate image
-    gen_image1 = generator_1(image_batch)
+  # Get one image for each datast
+  for img_1, img_2 in tf.data.Dataset.zip((dataset_1, dataset_2)).take(1):
+    
+    # Generate image transformed from domain 1 to domain 2 and the other way around
+    gen_image_1 = generator_1(img_2)
+    gen_image_2 = generator_2(img_1)
 
-  # image generation from domain of dataset2  to dataset1
-  for image_batch in dataset1.take(1):
-    image2 = image_batch
-    #generate image
-    gen_image2 = generator_2(image_batch)
-  
-  return image1, gen_image1, image2, gen_image2
+    # Create a figure that will contain our plot
+    figure = plt.figure(figsize=(20,20))
+    # Specifies the index on the grid
+    ax = plt.subplot(2, 2, 1)
+    # Squee to eliminate the batchsize dimension. 
+    # Mutiply image by 0.5 and add 0.5 to undo the normalization
+    plt.imshow(tf.squeeze(tf.image.convert_image_dtype(img_2*0.5 +0.5, dtype= tf.uint8)))
+    plt.axis('off')
+    ax = plt.subplot(2, 2, 2)
+    plt.imshow(tf.squeeze(tf.image.convert_image_dtype(gen_image_1*0.5 +0.5, dtype= tf.uint8)))
+    plt.axis('off')
+    ax = plt.subplot(2, 2, 3)
+    plt.imshow(tf.squeeze(tf.image.convert_image_dtype(img_1*0.5 +0.5, dtype= tf.uint8)))
+    plt.axis('off')
+    ax = plt.subplot(2, 2, 4)
+    plt.imshow(tf.squeeze(tf.image.convert_image_dtype(gen_image_2*0.5 +0.5, dtype= tf.uint8)))
+    plt.axis('off')
+
+    # We copied the section below for converting the figure to PNG 
+    # from the tensorboard documentarion at:
+    # https://www.tensorflow.org/tensorboard/image_summaries#visualizing_multiple_images
+
+    # Save the plot to a PNG in memory.
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    # Closing the figure prevents it from being displayed directly inside
+    # the notebook.
+    plt.close(figure)
+    buf.seek(0)
+    # Convert PNG buffer to TF image with 3 channels for RGB
+    image = tf.image.decode_png(buf.getvalue(), channels=3)
+    # Add the batch dimension
+    image = tf.expand_dims(image, 0)
+
+    return image
+
 
 
