@@ -29,8 +29,7 @@ def get_custom(path,batchsize):
                                 label_mode= None, shuffle = False, batch_size =batchsize)
 
     if fantasy_dataset.len() > 25:
-        print("dataset too large")
-        break
+        raise ValueError('Dataset is too large! Try again with a smaller dataset.')
     #For us these training sets were small (12-24 images)
     #thus we filled up our datasets with either exact copies or crops of the images, so:
     #Copy images in style refernce / fantasy dataset: and randomly crop some of the copies
