@@ -8,9 +8,24 @@ def get_oranges(batchsize):
     test_oranges = preprocessing(test_oranges, batchsize, do_flip = False)
     return train_oranges, test_oranges
 
-def get_fantasy(path,batchsize):
+def get_horses(batchsize):
+    train_horses, train_zebras, test_horses, test_zebras = tfds.load('cycle_gan/horse2zebra',
+                                                                 split = ['trainA','trainB', 'testA[:30]', 'testB[:30]'],
+                                                                 as_supervised=True)
+
+    #perform further preprocessing steps
+    train_horses = preprocessing(train_horses, batchsize, do_flip = True)
+    train_zebras = preprocessing(train_zebras, batchsize,  do_flip = True)
+
+    #for the test dataset which we use to print images in the end
+    test_horses = preprocessing(test_horses, batchsize,  do_flip = False)
+    test_zebras = preprocessing(test_zebras, batchsize,  do_flip = False)
+    return train_horses, train_zebras, test_horses, test_zebras
+
+def get_custom(path,batchsize):
     fantasy_dataset = tf.keras.preprocessing.image_dataset_from_directory(path, image_size= (220,220),
                                 label_mode= None, shuffle = False, batch_size =batchsize)
+
     #For us these training sets were small (12-24 images)
     #thus we filled up our datasets with either exact copies or crops of the images, so:
     #Copy images in style refernce / fantasy dataset: and randomly crop some of the copies
@@ -32,19 +47,6 @@ def get_fantasy(path,batchsize):
 
     return fantasy_dataset
 
-def get_horses(batchsize):
-    train_horses, train_zebras, test_horses, test_zebras = tfds.load('cycle_gan/horse2zebra',
-                                                                 split = ['trainA','trainB', 'testA[:30]', 'testB[:30]'],
-                                                                 as_supervised=True)
-
-    #perform further preprocessing steps
-    train_horses = preprocessing(train_horses, batchsize, do_flip = True)
-    train_zebras = preprocessing(train_zebras, batchsize,  do_flip = True)
-
-    #for the test dataset which we use to print images in the end
-    test_horses = preprocessing(test_horses, batchsize,  do_flip = False)
-    test_zebras = preprocessing(test_zebras, batchsize,  do_flip = False)
-    return train_horses, train_zebras, test_horses, test_zebras
 
 #definition of further preprocessing steps
 def preprocessing(image_set, batchsize, do_flip):
