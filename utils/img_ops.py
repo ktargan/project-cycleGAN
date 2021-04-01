@@ -1,5 +1,6 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import io
 
 def plot(image_batch, gen_images, gen_images_back, title):
   #plots 3 images next to each other, original, generated and backwards generated
