@@ -11,8 +11,8 @@ def get_oranges(batchsize):
     train_oranges, test_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB', 'testB[:30]'], as_supervised=True)
 
     #pass dataset through pipeline
-    train_oranges = preprocessing(train_oranges, batchsize, do_flip = True)
-    test_oranges = preprocessing(test_oranges, batchsize, do_flip = False)
+    train_oranges = preprocessing(train_oranges, batchsize, do_variation = True)
+    test_oranges = preprocessing(test_oranges, batchsize, do_variation = False)
     return train_oranges, test_oranges
 
 '''Function load a horse2zebra dataset and starts preprocessing
@@ -26,12 +26,12 @@ def get_horses(batchsize):
                                                                  as_supervised=True)
 
     #perform further preprocessing steps
-    train_horses = preprocessing(train_horses, batchsize, do_flip = True)
-    train_zebras = preprocessing(train_zebras, batchsize,  do_flip = True)
+    train_horses = preprocessing(train_horses, batchsize, do_variation = True)
+    train_zebras = preprocessing(train_zebras, batchsize,  do_variation = True)
 
     #for the test dataset which we use to print images in the end
-    test_horses = preprocessing(test_horses, batchsize,  do_flip = False)
-    test_zebras = preprocessing(test_zebras, batchsize,  do_flip = False)
+    test_horses = preprocessing(test_horses, batchsize,  do_variation = False)
+    test_zebras = preprocessing(test_zebras, batchsize,  do_variation = False)
     return train_horses, train_zebras, test_horses, test_zebras
 
 '''Function will load a custom dataset and preprocess it.
@@ -72,24 +72,27 @@ def get_custom(path,batchsize, copy_times):
 
     Keyword arguments:
     batchsize
-    do_flip: boolean that indicates if the dataset should be augemented by flipping images
+    do_variation: boolean that indicates if the dataset be slightly variated
 '''
-def preprocessing(image_set, batchsize, do_flip):
+def preprocessing(image_set, batchsize, do_variation):
 
-    #resize image to smaller size (faster computation and thus more manageable for the scope of the task)
-    #firstly by simply resizing and secondly randomly cropping the resulting images (introduces variation)
-    image_set = image_set.map(lambda image, label: tf.image.resize(image,[135,135]))
-    image_set = image_set.map(lambda image: tf.image.random_crop(image,[128,128,3]))
+    if do_variation:
+        #resize image to smaller size (faster computation and thus more manageable for the scope of the task)
+        #firstly by simply resizing and secondly randomly cropping the resulting images (introduces variation)
+        image_set = image_set.map(lambda image, label: tf.image.resize(image,[135,135]))
+        image_set = image_set.map(lambda image: tf.image.random_crop(image,[128,128,3]))
 
-    if do_flip:
         #randomly decide to mirror images (make sure that they do not all face the same direction for one class)
         image_set = image_set.map(lambda image: tf.image.random_flip_left_right(image))
 
-    # images are normalizied to [-1, 1]
-    image_set = image_set.map(lambda image: (image/127.5)-1)
+        # images are normalizied to [-1, 1]
+        image_set = image_set.map(lambda image: (image/127.5)-1)
 
+        image_set = image_set.shuffle(buffer_size = 1000)
+    else:
+        image_set = image_set.map(lambda image, label: tf.image.resize(image,[128,128]))
+        image_set = image_set.map(lambda image: (image/127.5)-1)
     #Zhu et al. use a batchsize of 1
-    image_set = image_set.shuffle(buffer_size = 1000)
     image_set = image_set.batch(batchsize)
     image_set = image_set.prefetch(8)
 
