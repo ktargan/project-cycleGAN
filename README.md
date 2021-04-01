@@ -18,8 +18,11 @@ Our project was created with:
 
 In their paper, Zhu et al. propose a network that learns image-to-image translation without paired training examples. Therefore, their approach is valuable for settings where aligned input and output images are not readily available. To form a complete CycleGAN, Zhu et al. rely on two Generative Adversarial Networks (GANs) and thus, exploit the advantages of adversarial losses in several ways. In the absence of supervision on the basis of mapped ground truth images, the model is trained to learn a distribution close to the original distribution underlying the output domain (through the discriminator classification). Thus, any single image of the input domain has a large corresponding space of mapping possibilities and the model does not just learn to create a single target image. To ensure that the model performs well nonetheless, Zhu et al. enforce the cycle-consistency of translation through an additional loss objective. As a result, the model is more resistant to mode collapse and is able to translate between both domains. 
 
+
 ![grafik](https://user-images.githubusercontent.com/64196273/113331736-98662680-9320-11eb-8c1a-39d006f0f60e.png)
+
 Illustration by Zhu et al., 2017: Visualizes both the structure of the GAN architecture as well as the cycle-consistency component. The cycle consistency loss is split into two components as illustrated in b) and c). An image of domain Y is translated to domain Y by generator G. As a second step the generated image is passed to generator F to recreate an image of the original domain X. On this basis one side of the cycle consistency loss can be computed.
+
 
 This repository includes implementations of a CycleGAN heavily based on the architectural choices proposed by Zhu et al. (see generator.py and discriminator.py).
 Additionally, further model architectures are included in the folder models. First, as Zhu et al. cite Johnson et al., 2016 as reference for their generator architecture, we have re-implemented the network proposed by them as well. Besides, this includes implementation of the networks with instance instead of batch normalization.
