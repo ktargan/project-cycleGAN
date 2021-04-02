@@ -5,10 +5,11 @@ import tensorflow_datasets as tfds
 def get_oranges(batchsize):
     '''Function loads a oranges from apple2orange dataset and starts preprocessing
 
-        Keyword arguments:
-        batchsize
+    Keyword arguments:
+    batchsize
 
-        returns preprocessed datasets'''
+    returns preprocessed datasets
+    '''
     #loads the orange dataset used for CycleGAN apple2orange
     train_oranges, test_oranges = tfds.load('cycle_gan/apple2orange', split = ['trainB', 'testB[:30]'], as_supervised=True)
 
@@ -24,7 +25,8 @@ def get_horses(batchsize):
     Keyword arguments:
     batchsize
 
-    returns: preprocessed datasets'''
+    returns: preprocessed datasets
+    '''
 
     train_horses, train_zebras, test_horses, test_zebras = tfds.load('cycle_gan/horse2zebra',
                                                                  split = ['trainA','trainB', 'testA[:30]', 'testB[:30]'],
@@ -48,7 +50,8 @@ def get_custom(path,batchsize, copy_times):
     batchsize
     copy_times : how often shall the small dataset be copied and augmented to create larger datset
 
-    returns: preprocessed dataset'''
+    returns: preprocessed dataset
+    '''
 
     fantasy_dataset = tf.keras.preprocessing.image_dataset_from_directory(path, image_size= (220,220),
                                 label_mode= None, shuffle = False, batch_size =batchsize)
@@ -84,7 +87,8 @@ def preprocessing(image_set, batchsize, do_variation):
     batchsize
     do_variation: boolean that indicates if the dataset be slightly variated
 
-    returns: preprocessed dataset'''
+    returns: preprocessed dataset
+    '''
     #if images should be preprocessed with slightly random variations
     if do_variation:
         #resize image to smaller size (faster computation and thus more manageable for the scope of the task)
