@@ -85,7 +85,7 @@ def preprocessing(image_set, batchsize, do_variation):
     do_variation: boolean that indicates if the dataset be slightly variated
 
     returns: preprocessed dataset'''
-
+    #if images should be preprocessed with slightly random variations
     if do_variation:
         #resize image to smaller size (faster computation and thus more manageable for the scope of the task)
         #firstly by simply resizing and secondly randomly cropping the resulting images (introduces variation)
@@ -99,6 +99,7 @@ def preprocessing(image_set, batchsize, do_variation):
         image_set = image_set.map(lambda image: (image/127.5)-1)
 
         image_set = image_set.shuffle(buffer_size = 1000)
+    #in case of test dataset skip variation step
     else:
         image_set = image_set.map(lambda image, label: tf.image.resize(image,[128,128]))
         image_set = image_set.map(lambda image: (image/127.5)-1)
