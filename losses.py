@@ -3,7 +3,7 @@ BCE = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
 
 def calc_cycle_loss(real_image, cycled_image, lamba):
-''' Defines the cycle consistency loss calculation, which ensures that generated
+    ''' Defines the cycle consistency loss calculation, which ensures that generated
     images are based on input images (Generators work consistently)
 
     Keyword arguments:
@@ -22,7 +22,7 @@ def calc_cycle_loss(real_image, cycled_image, lamba):
 
 #adversarial losses
 def generator_loss(prediction):
-''' Defines the adversarial loss objective for the generator
+    ''' Defines the adversarial loss objective for the generator
 
     Keyword arguments:
     prediction: how the generated image was classified by the discriminator
