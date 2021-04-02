@@ -70,6 +70,9 @@ class DownsampleBlock(tf.keras.layers.Layer):
     self.conv = tf.keras.layers.Conv2D(nr_filters, kernel_size= kernel_size, strides = stride,
                                        padding=padding, kernel_initializer = kernel_initializer)
 
+    #Instancenorm normalizes the feature channels of each image of a batch seperatly along
+    #its spatial dimensions. The gamma_initializer sets the initial weights of the layer
+    #to a normla distribution with mean at 0 and standard deviation at 0.02.
     self.norm_layer = tfa.layers.InstanceNormalization(
             gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
@@ -96,6 +99,10 @@ class UpsampleBlock(tf.keras.layers.Layer):
 
     self.conv = tf.keras.layers.Conv2DTranspose(nr_filters, kernel_size= kernel_size, strides = stride,
                                        padding='same', kernel_initializer = kernel_initializer)
+
+    #Instancenorm normalizes the feature channels of each image of a batch seperatly along
+    #its spatial dimensions. The gamma_initializer sets the initial weights of the layer
+    #to a normla distribution with mean at 0 and standard deviation at 0.02.
     self.norm_layer = tfa.layers.InstanceNormalization(
             gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
