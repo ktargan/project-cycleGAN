@@ -21,10 +21,10 @@ def get_oranges(batchsize):
 def get_horses(batchsize):
     '''Function load a horse2zebra dataset and starts preprocessing
 
-        Keyword arguments:
-        batchsize
+    Keyword arguments:
+    batchsize
 
-        returns: preprocessed datasets'''
+    returns: preprocessed datasets'''
 
     train_horses, train_zebras, test_horses, test_zebras = tfds.load('cycle_gan/horse2zebra',
                                                                  split = ['trainA','trainB', 'testA[:30]', 'testB[:30]'],
@@ -43,12 +43,12 @@ def get_horses(batchsize):
 def get_custom(path,batchsize, copy_times):
     '''Function will load a custom dataset and preprocess it.
 
-        Keyword arguments:
-        path to load from
-        batchsize
-        copy_times : how often shall the small dataset be copied and augmented to create larger datset
+    Keyword arguments:
+    path to load from
+    batchsize
+    copy_times : how often shall the small dataset be copied and augmented to create larger datset
 
-        returns: preprocessed dataset'''
+    returns: preprocessed dataset'''
 
     fantasy_dataset = tf.keras.preprocessing.image_dataset_from_directory(path, image_size= (220,220),
                                 label_mode= None, shuffle = False, batch_size =batchsize)
