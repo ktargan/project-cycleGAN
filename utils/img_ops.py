@@ -46,7 +46,7 @@ def plot_image_cycle(generator_1, generator_2, dataset1, dataset2, ablation = Fa
     take_images = 1
 
   # Image generation cycle: from dataset 2 to dataset 1 and back
-  for image_batch_2 in dataset2.take(take_images):
+  for image_batch_2 in dataset2.take(image_batch_2):
     # Feed original image into generator which translates it from domain 2 to domain 1
     gen_images_1 = generator_1(image_batch)
     # Feed generated image into generator which translates it from domain 1 to domain 2
@@ -55,10 +55,10 @@ def plot_image_cycle(generator_1, generator_2, dataset1, dataset2, ablation = Fa
     plot(image_batch_2, gen_images_1, gen_images_back_2)
 
   # Repeat the same process for dataset 1
-  for image_batch in dataset1.take(take_images):
-    gen_images = generator_2(image_batch)
-    gen_images_back = generator_1(gen_images)
-    plot(image_batch, gen_images, gen_images_back)
+  for image_batch_1 in dataset1.take(take_images):
+    gen_images_2 = generator_2(image_batch_1)
+    gen_images_back_1 = generator_1(gen_images_2)
+    plot(image_batch_1, gen_images_2, gen_images_back_1)
 
 
 def plot_to_tf_image(generator_1, generator_2, dataset_1, dataset_2):
