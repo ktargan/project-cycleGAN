@@ -4,9 +4,11 @@ import io
 
 def plot(image_batch, gen_images, gen_images_back):
     '''plots 3 images next to each other.
+
     Keyword arguments: original image,
                        generated image,
-                       and backwards generated'''
+                       and backwards generated
+    '''
     # Define plot with one ow and three columns
     fig, ax = plt.subplots(1,3)
     # Squeeze image will change the shape of the image from (1, hight, width, 3) to (hight, width, 3)
@@ -27,11 +29,13 @@ def plot(image_batch, gen_images, gen_images_back):
 def plot_image_cycle(generator_1, generator_2, dataset1, dataset2, ablation = False):
   '''Creates a plot each dataset it shows a full image cycle - i.e. our network translates
   an image from the domain of one domain X to domain Y and from domain Y back to X.
+
   Keyword arguments:
            dataset1, contains images of domain 1
 	   dataset_2,  contains images of domain 2
            generator_1, translates images from domain 2 to domain 1 - i.e. generates domain 1 images
-  	   generator_2, translates images from domain 1 to domain 2 '''
+  	   generator_2, translates images from domain 1 to domain 2
+  '''
 
   # For ablation studies we want to generate the same 30 test images for both datasets
   # So for ablation we set take_images to 30
@@ -59,12 +63,15 @@ def plot_image_cycle(generator_1, generator_2, dataset1, dataset2, ablation = Fa
 
 def plot_to_tf_image(generator_1, generator_2, dataset_1, dataset_2):
   '''Creates a 2x2 grid plot and converts it to one single tf image.
+
   Keyword arguments:
              dataset1, contains images of domain 1
 	     dataset_2,  contains images of domain 2
              generator_1, translates images from domain 2 to domain 1 - i.e. generates domain 1 images
   	     generator_2, translates images from domain 1 to domain 2 
-  Returns:   A png image converted to TF image'''  
+
+  Returns:   A png image converted to TF image
+  '''  
 
   # Get one image for each datast
   for img_1, img_2 in tf.data.Dataset.zip((dataset_1, dataset_2)).take(1):

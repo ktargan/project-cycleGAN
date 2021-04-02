@@ -3,7 +3,18 @@ import losses
 
 #module defines training step for generator and discriminator
 #variable names are defined in relation to the horse2zebra dataset to be more understandable
+
 def training_step_discrim(discriminator, optimizer, images, generated_images):
+  '''Calculates the network loss of the discriminator and backpropagates 
+  it through the network and updates it.
+
+  Args: Discriminator,
+           the respective optimizer,
+           real images,
+	   fake images
+
+  Returns: Loss of the discriminator
+  '''
   # calculate the discriminator loss and apply gradients
   with tf.GradientTape() as tape:
     # feed real images into discriminator, get the predictions
@@ -23,6 +34,21 @@ def training_step_discrim(discriminator, optimizer, images, generated_images):
 @tf.function
 def training_step_gen(generator_zebras, generator_horses, discriminator_zebras, discriminator_horses,
                       images_zebras, images_horses, optimizer_zebras, optimizer_horses, lambda_factor):
+  '''Calculates the network losses of the two generators and backpropagates 
+  them through the networks and updates them.
+
+  Args: generator_zebras (Translates horse images to zebra images),
+           generator_horses,
+           discriminator_zebras (predicts wheter zebra images are real or fake),
+           discriminator_horses,
+           images_zebras,
+	   images_horses,
+           optimizer_zebras (optimizer of the zebra generator),
+           optimizer_horses,
+           lambda_factor (Weights the cycle consistency loss and the idetity loss)
+
+  Returns: Loss of the two generators and their generated fake images.
+  '''
   #clarification: generator_zebras generates zebra images from horses
   #Calculate the loss for both generators and update the weights
   with tf.GradientTape() as tape_horse, tf.GradientTape() as tape_zebra:
