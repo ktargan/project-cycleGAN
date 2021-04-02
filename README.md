@@ -1,7 +1,7 @@
 # CycleGAN Reimplementation in Tensorflow
 
 This is a reimplementation of the cycle-consistent generative adversarial network (CycleGAN) by Zhu et al., 2017 (see References).
-The project has been adopted as part of a university course assignment and is completed by a paper summarising objectives and results of ablations studies.
+The project has been adopted as part of a university course assignment and is completed by a paper summarising objectives and results of ablations studies (see project_report).
 	
 ## Table of contents
 * [Technical details](#technical-details)
