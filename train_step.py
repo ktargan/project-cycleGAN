@@ -5,7 +5,7 @@ import losses
 #variable names are defined in relation to the horse2zebra dataset to be more understandable
 
 def training_step_discrim(discriminator, optimizer, images, generated_images):
-  '''Calculates the network loss of the discriminator and backpropagates 
+  '''Calculates the network loss of the discriminator and backpropagates
   it through the network and updates it.
 
   Args: Discriminator,
@@ -31,24 +31,27 @@ def training_step_discrim(discriminator, optimizer, images, generated_images):
   optimizer.apply_gradients(zip(gradients, discriminator.trainable_variables))
   return discr_loss
 
+
+'''Calculates the network losses of the two generators and backpropagates
+them through the networks and updates them.
+
+Args: generator_zebras (Translates horse images to zebra images),
+   generator_horses,
+   discriminator_zebras (predicts wheter zebra images are real or fake),
+   discriminator_horses,
+images_zebras,
+images_horses,
+   optimizer_zebras (optimizer of the zebra generator),
+   optimizer_horses,
+   lambda_factor (Weights the cycle consistency loss and the idetity loss)
+
+Returns: Loss of the two generators and their generated fake images.
+'''
+
 @tf.function
 def training_step_gen(generator_zebras, generator_horses, discriminator_zebras, discriminator_horses,
                       images_zebras, images_horses, optimizer_zebras, optimizer_horses, lambda_factor):
-  '''Calculates the network losses of the two generators and backpropagates 
-  them through the networks and updates them.
 
-  Args: generator_zebras (Translates horse images to zebra images),
-           generator_horses,
-           discriminator_zebras (predicts wheter zebra images are real or fake),
-           discriminator_horses,
-           images_zebras,
-	   images_horses,
-           optimizer_zebras (optimizer of the zebra generator),
-           optimizer_horses,
-           lambda_factor (Weights the cycle consistency loss and the idetity loss)
-
-  Returns: Loss of the two generators and their generated fake images.
-  '''
   #clarification: generator_zebras generates zebra images from horses
   #Calculate the loss for both generators and update the weights
   with tf.GradientTape() as tape_horse, tf.GradientTape() as tape_zebra:
