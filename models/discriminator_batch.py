@@ -5,8 +5,7 @@ import tensorflow_addons as tfa
 
 '''Convolutional Block that combines a Convlayer with BatchNorm and leakyReLU
 
-  Keyword Arguments: Arguments needed for Convolutional layer
-  '''
+  Keyword Arguments: Arguments needed for Convolutional layer'''
 class ConvoBlock(tf.keras.layers.Layer):
   def __init__(self,nr_filters, strides, kernel_initializer):
     super(ConvoBlock, self).__init__()
@@ -31,8 +30,7 @@ class ConvoBlock(tf.keras.layers.Layer):
   architecture based on Zhu et al.,
 
   Keyword Arguments:
-   patches - the size of the image patches the discriminator works on
-  '''
+   patches - the size of the image patches the discriminator works on'''
 class Discriminator(tf.keras.Model):
   def __init__(self, patches):
     super(Discriminator, self).__init__()

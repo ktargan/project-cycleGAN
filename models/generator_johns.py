@@ -10,8 +10,7 @@ import layers
 
   Keyword Arguments:
   nr_filters : amount of filters for the convolutional layers
-  kernel_initializer: how to inititialize the weights
-'''
+  kernel_initializer: how to inititialize the weights'''
 class ResidualBlock(tf.keras.layers.Layer):
   def __init__(self, nr_filters, kernel_initializer, size):
     super(ResidualBlock,self).__init__()
@@ -26,8 +25,8 @@ class ResidualBlock(tf.keras.layers.Layer):
                                          #padding = 'same'
                                          )
 
-    #instance normalization as batch size is 1
-    self.batch_1 = tfa.layers.InstanceNormalization(
+    #instance normalization
+    self.norm_1 = tfa.layers.InstanceNormalization(
           gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
     self.relu_1 = tf.keras.layers.ReLU()
@@ -37,7 +36,7 @@ class ResidualBlock(tf.keras.layers.Layer):
                                          kernel_initializer = kernel_initializer
                                         # padding = 'same'
                                          )
-    self.batch_2 = tfa.layers.InstanceNormalization(
+    self.norm_2 = tfa.layers.InstanceNormalization(
             gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
     self.crop = tf.keras.layers.experimental.preprocessing.CenterCrop(height=size, width = size)
@@ -48,12 +47,12 @@ class ResidualBlock(tf.keras.layers.Layer):
   def call(self, start_x):
     #x = self.padd1(start_x)
     x = self.conv_1(start_x)
-    x = self.batch_1(x)
+    x = self.norm_1(x)
 
     x = self.relu_1(x)
     #x = self.padd2(x)
     x = self.conv_2(x)
-    x = self.batch_2(x)
+    x = self.norm_2(x)
     # skip connections are used: add up the input of the block to its output
     # but first the input needs to be cropped as the output is smaller in max_size
     # (Johnson et al. do not use padding in residual blocks)
@@ -118,11 +117,7 @@ class UpsampleBlock(tf.keras.layers.Layer):
 
 '''Generator is built up from different Down-, upsampling and Residual blocks
 
-  architecture based on Zhu et al., but also the original Image Transformation
-  Network by Johnson
-
-  Keyword Arguments:
-  '''
+  architecture based Image Transformation Network by Johnson'''
 class Generator(tf.keras.Model):
   def __init__(self):
     super(Generator, self).__init__()

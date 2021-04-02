@@ -10,8 +10,7 @@ import layers
 
   Keyword Arguments:
   nr_filters : amount of filters for the convolutional layers
-  kernel_initializer: how to inititialize the weights
-'''
+  kernel_initializer: how to inititialize the weights'''
 class ResidualBlock(tf.keras.layers.Layer):
   def __init__(self, nr_filters, kernel_initializer):
     super(ResidualBlock,self).__init__()
@@ -26,8 +25,8 @@ class ResidualBlock(tf.keras.layers.Layer):
                                          #padding = 'same'
                                          )
 
-    #instance normalization as batch size is 1
-    self.batch_1 = tf.keras.layers.BatchNormalization()
+    #instance normalization
+    self.norm_1 = tf.keras.layers.BatchNormalization()
 
     self.relu_1 = tf.keras.layers.ReLU()
 
@@ -36,7 +35,7 @@ class ResidualBlock(tf.keras.layers.Layer):
                                          kernel_initializer = kernel_initializer
                                         # padding = 'same'
                                          )
-    self.batch_2 = tf.keras.layers.BatchNormalization()
+    self.norm_2 = tf.keras.layers.BatchNormalization()
 
     self.relu_2 = tf.keras.layers.ReLU()
 
@@ -44,13 +43,13 @@ class ResidualBlock(tf.keras.layers.Layer):
     #x = tf.pad(start_x,[[0, 0], [1, 1], [1, 1], [0, 0]], "REFLECT")
     x = self.padd1(start_x)
     x = self.conv_1(x)
-    x = self.batch_1(x, training)
+    x = self.norm_1(x, training)
 
     x = self.relu_1(x)
     #x = tf.pad(x,[[0, 0], [1, 1], [1, 1], [0, 0]], "REFLECT")
     x = self.padd2(x)
     x = self.conv_2(x)
-    x = self.batch_2(x, training)
+    x = self.norm_2(x, training)
     # skip connections are used: add up the input to block to its output
     x = x + start_x
     x = self.relu_2(x)
@@ -111,10 +110,7 @@ class UpsampleBlock(tf.keras.layers.Layer):
 '''Generator is built up from different Down-, upsampling and Residual blocks
 
   architecture based on Zhu et al., but also the original Image Transformation
-  Network by Johnson
-
-  Keyword Arguments:
-  '''
+  Network by Johnson'''
 class Generator(tf.keras.Model):
   def __init__(self):
     super(Generator, self).__init__()

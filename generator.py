@@ -10,8 +10,7 @@ import layers
 
   Keyword Arguments:
   nr_filters : amount of filters for the convolutional layers
-  kernel_initializer: how to inititialize the weights
-'''
+  kernel_initializer: how to inititialize the weights'''
 class ResidualBlock(tf.keras.layers.Layer):
   def __init__(self, nr_filters, kernel_initializer):
     super(ResidualBlock,self).__init__()
@@ -29,7 +28,7 @@ class ResidualBlock(tf.keras.layers.Layer):
     #Instancenorm normalizes the feature channels of each image of a batch seperatly along
     #its spatial dimensions. The gamma_initializer sets the initial weights of the layer
     #to a normla distribution with mean at 0 and standard deviation at 0.02.
-    self.batch_1 = tfa.layers.InstanceNormalization(
+    self.norm_1 = tfa.layers.InstanceNormalization(
           gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
     self.relu_1 = tf.keras.layers.ReLU()
@@ -39,7 +38,7 @@ class ResidualBlock(tf.keras.layers.Layer):
                                          kernel_initializer = kernel_initializer
                                         # padding = 'same'
                                          )
-    self.batch_2 = tfa.layers.InstanceNormalization(
+    self.norm_2 = tfa.layers.InstanceNormalization(
             gamma_initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02))
 
     self.relu_2 = tf.keras.layers.ReLU()
@@ -47,12 +46,12 @@ class ResidualBlock(tf.keras.layers.Layer):
   def call(self, start_x):
     x = self.padd1(start_x)
     x = self.conv_1(x)
-    x = self.batch_1(x)
+    x = self.norm_1(x)
 
     x = self.relu_1(x)
     x = self.padd2(x)
     x = self.conv_2(x)
-    x = self.batch_2(x)
+    x = self.norm_2(x)
     # skip connections are used: add up the input to block to its output
     x = x + start_x
     x = self.relu_2(x)
@@ -116,10 +115,7 @@ class UpsampleBlock(tf.keras.layers.Layer):
 '''Generator is built up from different Down-, upsampling and Residual blocks
 
   architecture based on Zhu et al., but also the original Image Transformation
-  Network by Johnson
-
-  Keyword Arguments:
-  '''
+  Network by Johnson'''
 class Generator(tf.keras.Model):
   def __init__(self):
     super(Generator, self).__init__()

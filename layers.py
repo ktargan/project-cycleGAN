@@ -11,8 +11,7 @@ class ReflectionPadding2D(tf.keras.layers.Layer):
         spatial dimensions.
 
     Returns:
-        A padded tensor with the same type as the input tensor.
-    """
+        A padded tensor with the same type as the input tensor."""
 
     def __init__(self, padding=(1, 1), **kwargs):
         #how much padding should be added (passed as argument)
