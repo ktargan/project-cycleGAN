@@ -46,9 +46,9 @@ def plot_image_cycle(generator_1, generator_2, dataset1, dataset2, ablation = Fa
     take_images = 1
 
   # Image generation cycle: from dataset 2 to dataset 1 and back
-  for image_batch_2 in dataset2.take(image_batch_2):
+  for image_batch_2 in dataset2.take(take_images):
     # Feed original image into generator which translates it from domain 2 to domain 1
-    gen_images_1 = generator_1(image_batch)
+    gen_images_1 = generator_1(image_batch_2)
     # Feed generated image into generator which translates it from domain 1 to domain 2
     gen_images_back_2 = generator_2(gen_images_1)
     # Feed the resulting images into our plot function

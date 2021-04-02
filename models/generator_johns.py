@@ -3,7 +3,9 @@ import numpy as np
 import tensorflow_addons as tfa
 import layers
 
-'''Defines a Block as used in the ResNet architecture
+
+class ResidualBlock(tf.keras.layers.Layer):
+  '''Defines a Block as used in the ResNet architecture
   2 covolutional layers
   InstanceNormalization (instead of Batchnorm)
   Reflection Padding
@@ -11,7 +13,6 @@ import layers
   Keyword Arguments:
   nr_filters : amount of filters for the convolutional layers
   kernel_initializer: how to inititialize the weights'''
-class ResidualBlock(tf.keras.layers.Layer):
   def __init__(self, nr_filters, kernel_initializer, size):
     super(ResidualBlock,self).__init__()
 
@@ -62,12 +63,13 @@ class ResidualBlock(tf.keras.layers.Layer):
     return x
 
 
-'''Block used for downsampling images/featuremaps with strided convolutions
+
+class DownsampleBlock(tf.keras.layers.Layer):
+  '''Block used for downsampling images/featuremaps with strided convolutions
   Convolutional layer, Instance Normalization, LeakyReLU activation
 
   Keyword Arguments:
   parameters needed to define convolutional layer'''
-class DownsampleBlock(tf.keras.layers.Layer):
   def __init__(self, nr_filters, kernel_size, stride, padding, kernel_initializer):
     super(DownsampleBlock,self).__init__()
 
@@ -88,12 +90,13 @@ class DownsampleBlock(tf.keras.layers.Layer):
     return x
 
 
-'''Block used for upsampling images with fractionally strided convolution,
+
+class UpsampleBlock(tf.keras.layers.Layer):
+  '''Block used for upsampling images with fractionally strided convolution,
   TransposedConvolutional layer, Instance Normalization, LeakyReLU activation
 
   Keyword Arguments:
   parameters needed to define convolutional layer'''
-class UpsampleBlock(tf.keras.layers.Layer):
   def __init__(self, nr_filters, kernel_size, stride, kernel_initializer):
     super(UpsampleBlock,self).__init__()
 
@@ -115,10 +118,11 @@ class UpsampleBlock(tf.keras.layers.Layer):
 
 
 
-'''Generator is built up from different Down-, upsampling and Residual blocks
+
+class Generator(tf.keras.Model):
+  '''Generator is built up from different Down-, upsampling and Residual blocks
 
   architecture based Image Transformation Network by Johnson'''
-class Generator(tf.keras.Model):
   def __init__(self):
     super(Generator, self).__init__()
     #structure as referenced by Zhu et al. is different from Johnson architecture:
